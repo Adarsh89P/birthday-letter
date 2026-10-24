@@ -5,7 +5,7 @@ const DEFAULT_LETTER = {
   from: "Adarsh",
   month: 10,
   day: 25,
-  age: 28,
+  age: "",
   message:
     "Happy birthday to the person who makes my whole world softer.\n\nI wanted to give you something you could open more than once, so I made you this. Every surprise in here is a small piece of how I feel about you.\n\nThank you for your laugh, your patience, your terrible jokes and your beautiful heart. Thank you for the late-night talks, the silly fights we always laugh about later, and the quiet moments that mean everything to me.\n\nI hope this year gives you everything you've been wishing for, and a few things you never thought to ask for. And on the days that feel heavy, I hope you remember how deeply you are loved.\n\nToday is all about you. Make a big wish. I'll be right here, cheering the loudest when it comes true.",
   lock: true,
