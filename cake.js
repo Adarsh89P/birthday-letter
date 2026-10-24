@@ -77,17 +77,21 @@ function makeCake(host, { candles = 5, speed = 0.004 } = {}) {
           else if (it.y === "top") { y = t.ry + t.ry * z - 12; hide = false; }
           else if (it.y === "drip") y = t.ry + t.ry * z - 4;
           else y = t.ry + it.y + t.ry * z;
+          // only touch styles that changed: writing opacity/z-index every frame is costly on phones
+          if (it.hide !== hide) { it.hide = hide; it.el.style.opacity = hide ? 0 : 1; }
+          if (hide) continue;
           const sx = it.y === "top" ? 1 : Math.max(.15, z);
-          it.el.style.transform = `translate(${rx + x - it.w / 2}px, ${y}px) scaleX(${sx})`;
-          it.el.style.opacity = hide ? 0 : 1;
-          it.el.style.zIndex = Math.round(z * 10) + 10;
+          it.el.style.transform = `translate(${(rx + x - it.w / 2).toFixed(1)}px, ${y.toFixed(1)}px) scaleX(${sx.toFixed(2)})`;
+          const zi = Math.round(z * 4) + 10;
+          if (it.z !== zi) { it.z = zi; it.el.style.zIndex = zi; }
         }
       }
       for (const c of candleList) {
         const a = c.angle + this.rot;
         const x = Math.sin(a) * 52, y = Math.cos(a) * 52 * (20 / 90);
-        c.el.style.transform = `translate(${x}px, ${y}px)`;
-        c.el.style.zIndex = Math.round(y + 50);
+        c.el.style.transform = `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px)`;
+        const zi = Math.round(y + 50);
+        if (c.z !== zi) { c.z = zi; c.el.style.zIndex = zi; }
       }
     },
     enableDrag(area) {
@@ -108,9 +112,17 @@ function makeCake(host, { candles = 5, speed = 0.004 } = {}) {
   return cake;
 }
 
+// A cake is on screen when its surprise is the open one, or, for the party page cake, when no surprise is open.
+function cakeOnScreen(c) {
+  const gallery = document.getElementById("gallery");
+  const scene = c.host.closest(".scene");
+  if (scene) return !gallery.hidden && scene.classList.contains("active");
+  return gallery.hidden;
+}
+
 (function spinLoop() {
   for (const c of allCakes) {
-    if (!c.host.offsetParent) continue; // not on screen
+    if (!cakeOnScreen(c)) continue;
     if (!c.dragging) { c.rot += c.vel; c.vel += (c.speed - c.vel) * 0.02; }
     c.render();
   }

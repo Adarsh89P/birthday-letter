@@ -576,11 +576,18 @@ makeCake($("finalCake"), { candles: candleCount, speed: 0.006 });
 // ================= Confetti =================
 const cv = $("confetti"), ctx = cv.getContext("2d");
 let parts = [];
-function resize() { cv.width = innerWidth * devicePixelRatio; cv.height = innerHeight * devicePixelRatio; ctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0); }
+// Confetti doesn't need retina sharpness, and a smaller canvas is much cheaper to redraw on phones.
+const cdpr = Math.min(devicePixelRatio || 1, 1.5);
+function resize() { cv.width = innerWidth * cdpr; cv.height = innerHeight * cdpr; ctx.setTransform(cdpr, 0, 0, cdpr, 0, 0); }
 resize(); addEventListener("resize", resize);
 const confColors = ["#f472b6", "#e11d63", "#fbbf24", "#a78bfa", "#60a5fa", "#34d399", "#fff"];
+const small = innerWidth < 600;
+let drawing = false;
+function kick() { if (!drawing) { drawing = true; requestAnimationFrame(drawConfetti); } }
 function burst(x, y, n) {
   if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  if (small) n = Math.round(n * 0.55);
+  kick();
   for (let k = 0; k < n; k++) {
     const a = Math.random() * Math.PI * 2, sp = 4 + Math.random() * 9;
     parts.push({ x, y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp - 5, r: 4 + Math.random() * 5,
@@ -589,14 +596,16 @@ function burst(x, y, n) {
 }
 function ambient() {
   setInterval(() => {
-    if (parts.length > 160 || !$("gallery").hidden) return;
+    if (parts.length > (small ? 25 : 60) || !$("gallery").hidden || document.hidden) return;
+    kick();
     parts.push({ x: Math.random() * innerWidth, y: -10, vx: Math.random() - .5, vy: 1 + Math.random(), r: 3 + Math.random() * 3,
       c: confColors[Math.floor(Math.random() * confColors.length)], rot: 0, vr: (Math.random() - .5) * .1, life: 1, shape: 1, slow: true });
-  }, 320);
+  }, small ? 700 : 400);
 }
-(function drawConfetti() {
+function drawConfetti() {
   ctx.clearRect(0, 0, innerWidth, innerHeight);
   parts = parts.filter((p) => p.y < innerHeight + 20 && p.life > 0);
+  if (!parts.length) { drawing = false; return; } // nothing to draw: stop until the next burst
   for (const p of parts) {
     if (!p.slow) { p.vx *= .985; p.vy += .22; p.life -= .006; } else { p.vx += Math.sin(p.y / 40) * .02; }
     p.x += p.vx; p.y += p.vy; p.rot += p.vr;
@@ -607,7 +616,7 @@ function ambient() {
     ctx.restore();
   }
   requestAnimationFrame(drawConfetti);
-})();
+}
 
 // ================= Music box "Happy Birthday" (Web Audio, no files) =================
 let audioCtx = null;

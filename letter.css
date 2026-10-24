@@ -16,7 +16,7 @@ html, body { margin: 0; }
 body {
   font-family: Inter, system-ui, sans-serif;
   color: var(--ink);
-  background: radial-gradient(120% 80% at 50% 0%, var(--bg) 0%, var(--bg-2) 100%) fixed;
+  background: radial-gradient(120% 80% at 50% 0%, var(--bg) 0%, var(--bg-2) 100%);
   min-height: 100vh; min-height: 100dvh;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
@@ -148,7 +148,7 @@ h2 { font-family: "Playfair Display", serif; font-weight: 800; font-size: clamp(
 .tier .body { border-radius: 0 0 50% 50% / 0 0 var(--ry) var(--ry); }
 .tier .top { top: 0; height: calc(var(--ry) * 2); border-radius: 50%; }
 .tier .deco { position: absolute; inset: 0; pointer-events: none; }
-.tier .deco i { position: absolute; left: 0; top: 0; display: block; will-change: transform; }
+.tier .deco i { position: absolute; left: 0; top: 0; display: block; }
 .t1 { --ry: 26px; width: 250px; height: calc(110px + var(--ry) * 2); bottom: 24px; }
 .t1 .body { top: var(--ry); height: calc(110px + var(--ry)); background: linear-gradient(90deg, #8b6fc9 0%, #c4b0f0 30%, #b39ce6 60%, #7f62bf 100%); }
 .t1 .top { background: radial-gradient(ellipse at 50% 40%, #f3c9dc, #e9a9c6); }
@@ -165,8 +165,8 @@ h2 { font-family: "Playfair Display", serif; font-weight: 800; font-size: clamp(
   position: absolute; left: 50%; bottom: 100%; width: 14px; height: 24px; margin-left: -7px;
   border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
   background: radial-gradient(ellipse at 50% 70%, #fff 0%, #fde68a 35%, #fb923c 75%, transparent 76%);
-  filter: drop-shadow(0 0 8px rgba(251, 191, 36, .9));
-  transform-origin: 50% 90%; animation: flicker .18s ease-in-out infinite alternate;
+  box-shadow: 0 -2px 14px 3px rgba(251, 191, 36, .55);
+  transform-origin: 50% 90%; animation: flicker .3s ease-in-out infinite alternate;
   transition: opacity .4s, transform .4s;
 }
 .out .flame { opacity: 0; transform: scale(.2) translateY(6px); animation: none; }
@@ -222,6 +222,7 @@ h2 { font-family: "Playfair Display", serif; font-weight: 800; font-size: clamp(
   box-shadow: 0 10px 24px -12px rgba(0,0,0,.5); animation: hintIn .6s 1.2s both;
 }
 #gallery.swiped .swipe-hint { animation: hintOut .4s both; }
+#gallery.swiped .swipe-hint * { animation: none; }
 @keyframes hintIn { from { opacity: 0; transform: translate(-50%, 10px); } to { opacity: 1; transform: translate(-50%, 0); } }
 @keyframes hintOut { from { opacity: 1; transform: translate(-50%, 0); } to { opacity: 0; transform: translate(-50%, 10px); visibility: hidden; } }
 .sh-hand { display: inline-block; font-size: 18px; animation: swipeHand 1.8s ease-in-out infinite; }
@@ -233,7 +234,7 @@ h2 { font-family: "Playfair Display", serif; font-weight: 800; font-size: clamp(
 @keyframes swipeHand { 0%, 100% { transform: translateX(10px) rotate(8deg); } 50% { transform: translateX(-10px) rotate(-8deg); } }
 @keyframes arrowL { 0%, 100% { opacity: .3; } 50% { opacity: 1; transform: translateX(-3px); } }
 @keyframes arrowR { 0%, 100% { opacity: 1; transform: translateX(3px); } 50% { opacity: .3; transform: none; } }
-@keyframes nudge { 0%, 100% { transform: none; box-shadow: 0 8px 16px -8px var(--pink); } 50% { transform: translateX(4px); box-shadow: 0 0 0 8px rgba(225, 29, 99, .15); } }
+@keyframes nudge { 50% { transform: translateX(4px); } }
 
 /* ---------- Popup ---------- */
 .pop { position: fixed; inset: 0; z-index: 50; display: grid; place-items: center; padding: 24px 16px; background: rgba(43, 22, 48, .35); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); animation: fade .3s; }
@@ -502,7 +503,7 @@ h2 { font-family: "Playfair Display", serif; font-weight: 800; font-size: clamp(
 @keyframes smoke { 0% { opacity: .7; transform: translateY(0) scale(1); } 100% { opacity: 0; transform: translateY(-50px) scale(4); } }
 @keyframes wiggle { 0%, 100% { transform: rotate(0); } 25% { transform: rotate(-4deg); } 75% { transform: rotate(4deg); } }
 @keyframes blink { 50% { opacity: 0; } }
-@keyframes pulse { 0%, 100% { box-shadow: 0 0 0 5px rgba(143, 18, 50, .25), 0 8px 16px rgba(0,0,0,.3); } 50% { box-shadow: 0 0 0 12px rgba(143, 18, 50, .1), 0 8px 16px rgba(0,0,0,.3); } }
+@keyframes pulse { 50% { scale: 1.08; } }
 @keyframes bulbs { 50% { opacity: .55; } }
 @keyframes turnOut { to { transform: rotateY(-90deg); opacity: .6; } }
 @keyframes turnIn { from { transform: rotateY(90deg); opacity: .6; } }
@@ -510,6 +511,16 @@ h2 { font-family: "Playfair Display", serif; font-weight: 800; font-size: clamp(
 @keyframes flyUp { 0% { transform: translate(-50%, 0) scale(.6); opacity: 0; } 20% { opacity: 1; } 100% { transform: translate(-50%, -260px) scale(1.4) rotate(160deg); opacity: 0; } }
 @keyframes flash { 0% { opacity: 0; } 15% { opacity: 1; } 100% { opacity: 0; } }
 @keyframes drop { from { transform: translateY(-30px) rotate(-45deg); opacity: 0; } }
+
+/* ---------- Performance: phones ---------- */
+/* Animations on surprises that aren't open, or on the party page behind them, are paused. */
+.scene:not(.active) *, .scene:not(.active)::before, .scene:not(.active) *::before, .scene:not(.active) *::after,
+body.in-gallery #home *, body.in-gallery #home *::before, body.in-gallery #home *::after { animation-play-state: paused !important; }
+body.in-gallery #home { visibility: hidden; }
+/* Background blur is very slow on phones, so use solid panels instead. */
+* { -webkit-backdrop-filter: none !important; backdrop-filter: none !important; }
+.gnav, .home-btn, .hint { background: rgba(255, 255, 255, .96); }
+.pop { background: rgba(43, 22, 48, .55); }
 
 .reveal { opacity: 0; }
 body.started .reveal { animation: fadeUp .9s cubic-bezier(.2, .8, .3, 1) both; animation-delay: var(--d, 0s); }
