@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#fdf1ec" />
+<meta name="color-scheme" content="light" />
+<title>A Birthday Surprise</title>
+<meta name="description" content="Someone who loves you made you a little birthday party. Open it when you're ready." />
+<meta property="og:title" content="A birthday surprise is waiting for you 🎁" />
+<meta property="og:description" content="A cake to blow out, a letter to open and a few little surprises, made just for you." />
+<meta property="og:type" content="website" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=Caveat:wght@600;700&family=Fredoka:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="letter.css" />
+</head>
+<body>
+
+<div id="intro">
+  <div class="intro-wrap">
+    <div class="calendar">
+      <span class="heart">♥</span>
+      <div><div class="m" data-month></div><div class="d" data-day></div></div>
+    </div>
+    <div class="intro-tip">Someone who loves you made you something…</div>
+    <button class="btn" id="startBtn">Open your surprise ✨</button>
+  </div>
+</div>
+
+<canvas id="confetti"></canvas>
+
+<!-- ============ Party page ============ -->
+<main id="home">
+  <span class="pill reveal" style="--d:.05s">📅 <span id="pillDate"></span></span>
+  <h1 class="reveal" style="--d:.15s">Happy birthday,<span class="name-line"><span data-to></span><b>!</b></span></h1>
+  <div class="rotator reveal" style="--d:.3s">for being so <span class="word" id="word">amazing</span></div>
+  <p class="from reveal" style="--d:.4s"><span data-from></span> threw a little party, just for you.</p>
+
+  <div class="stage reveal" style="--d:.5s" id="stage" aria-label="A birthday cake you can drag to spin">
+    <div class="balloon left" id="digitL"></div>
+    <div class="balloon right" id="digitR"></div>
+    <div class="cake-host" id="homeCake"></div>
+    <div class="hint">‹ › Drag to spin <button id="blowBtn">Make a wish 🌬️</button></div>
+  </div>
+
+  <div class="bottom reveal" style="--d:.65s">
+    <div class="countdown" id="countdown">
+      <h3>UNTIL YOUR BIG DAY</h3>
+      <div class="units">
+        <div class="unit"><b id="cdD">00</b><span>DAYS</span></div>
+        <div class="unit"><b id="cdH">00</b><span>HOURS</span></div>
+        <div class="unit"><b id="cdM">00</b><span>MIN</span></div>
+        <div class="unit"><b id="cdS">00</b><span>SEC</span></div>
+      </div>
+    </div>
+    <button class="btn gift-btn" id="giftBtn">🎁 Open my gift</button>
+    <p class="lock-note" id="lockNote"></p>
+  </div>
+</main>
+
+<!-- ============ Surprise gallery ============ -->
+<div id="gallery" hidden>
+  <button class="home-btn" id="homeBtn">‹ Party</button>
+
+  <section class="scene s-candles" data-key="candles" data-title="The candles" data-icon="🕯️">
+    <div class="shade"></div>
+    <div class="scene-inner">
+      <div class="cake-host" id="bigCake"></div>
+      <div class="sheet">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div class="eyebrow" id="candleEyebrow">Make a wish</div>
+          <div class="mini-candles" id="miniCandles"></div>
+        </div>
+        <h2 style="font-size:24px">Close your eyes and make a wish</h2>
+        <div class="blow-row">
+          <button class="btn" id="micBtn">🎙️ Microphone</button>
+          <button class="btn ghost hold-btn" id="holdBtn">🌬️ Hold</button>
+        </div>
+        <div class="mic-meter" id="micMeter" hidden><i></i></div>
+        <p class="small" id="candleNote">Got your wish? Now blow gently into your microphone, or press and hold the button. The microphone only listens for your breath, right here on your phone. Nothing is recorded.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="scene s-letter" data-key="letter" data-title="The letter" data-icon="💌">
+    <div class="scene-inner">
+      <article class="letter-card" id="letterCard">
+        <div class="grab-bar"></div>
+        <div class="lc-head"><div><div class="eyebrow">Sealed with love</div><h3>A letter, just for you</h3></div></div>
+        <div class="lc-body">
+          <p>Dear <span data-to></span>,</p>
+          <div class="lc-msg" id="lcMsg"></div>
+          <p class="lc-sig">With love, <span data-from></span></p>
+        </div>
+      </article>
+      <div class="pocket" id="pocket">
+        <button class="wax" id="wax" aria-label="Open the letter">♥</button>
+        <div class="pull">⌃ TAP THE SEAL TO OPEN</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="scene s-claw" data-key="reasons" data-title="What I love" data-icon="🧸">
+    <div class="scene-inner">
+      <div class="scene-head"><h2>What I love about you</h2><button class="chip" id="showAll">Show all</button></div>
+      <div class="machine no-swipe">
+        <div class="marquee"><span>♥ Love prizes ♥</span></div>
+        <div class="glass" id="glass">
+          <div class="rail"></div>
+          <div class="claw" id="claw">
+            <div class="cable" id="cable"></div>
+            <div class="claw-unit" id="clawUnit"><div class="hub">♥</div><span class="arm l"></span><span class="arm r"></span></div>
+          </div>
+          <div class="balls"></div>
+          <div class="chute">♥</div>
+        </div>
+        <div class="panel" id="panel"><span class="stick"></span><span class="big"></span></div>
+        <div class="slots"><span class="coin"></span><span class="door">♥</span></div>
+      </div>
+      <div class="controls no-swipe">
+        <div class="joy" id="joy" aria-label="Joystick: drag left or right"><div class="knob" id="knob"></div></div>
+        <p class="ctl-hint">Line up the claw, then press Grab to win a reason.</p>
+        <button class="grab" id="grabBtn">GRAB</button>
+      </div>
+      <ol class="reasons-list" id="reasonsList" hidden></ol>
+    </div>
+  </section>
+
+  <section class="scene s-story" data-key="chapters" data-title="Our story" data-icon="📖">
+    <div class="scene-inner">
+      <div class="scene-head"><div class="eyebrow">Page by page</div><h2>Our story so far</h2></div>
+      <div class="book no-swipe" id="book">
+        <div class="page" id="page">
+          <div class="pg-num" id="pgNum"></div>
+          <h3 id="pgTitle"></h3>
+          <p id="pgText"></p>
+          <div class="pg-nav"><button id="pgPrev" aria-label="Previous page">‹</button><span id="pgCount"></span><button id="pgNext" aria-label="Next page">›</button></div>
+        </div>
+        <button class="cover" id="cover" aria-label="Open the book">
+          <span class="gifts"><span>🎁</span><span>🎁</span></span>
+          <span class="label"><span class="hand">Once upon a time…</span><b>Our story</b></span>
+        </button>
+      </div>
+      <p class="tip" id="bookTip">Tap the cover to begin</p>
+    </div>
+  </section>
+
+  <section class="scene s-wishes" data-key="wishes" data-title="Wishes" data-icon="⭐">
+    <div class="scene-inner">
+      <div class="scene-head"><div class="eyebrow">For the year ahead</div><h2>My wishes for you</h2></div>
+      <button class="jar" id="jar" aria-label="Tap the jar to release a wish">
+        <span class="body"><span class="stars" id="jarStars"></span></span>
+        <span class="neck"></span><span class="cork"></span><span class="bow"><i></i></span>
+      </button>
+      <p class="hand" id="jarTip">I filled this jar with wishes for you. Tap it and let one float up ✨</p>
+    </div>
+  </section>
+
+  <section class="scene s-moments" data-key="moments" data-title="Moments" data-icon="📸">
+    <div class="scene-inner">
+      <div class="scene-head"><div class="eyebrow">Say cheese!</div><h2>Moments I keep close</h2></div>
+      <div class="booth" id="booth">
+        <div class="booth-sign">Photo booth</div>
+        <div class="booth-awning"></div>
+        <div class="booth-body">
+          <div class="booth-window"><div class="curtain l"></div><div class="curtain r"></div><div class="flash" id="flash"></div><div class="booth-count" id="count"></div></div>
+          <div class="booth-dots" id="boothDots"></div>
+          <div class="booth-slot"></div>
+        </div>
+      </div>
+      <div class="strip-wrap"><div class="strip" id="strip"></div></div>
+      <button class="btn" id="snapBtn">Step inside the booth 📸</button>
+    </div>
+  </section>
+
+  <section class="scene s-places" data-key="places" data-title="Places" data-icon="🗺️">
+    <div class="scene-inner">
+      <div class="map" id="map">
+        <svg viewBox="0 0 300 200" aria-hidden="true">
+          <polygon points="10,40 105,22 105,182 10,164" fill="#a9e3bd" />
+          <polygon points="105,22 200,40 200,182 105,182" fill="#c9b9f2" />
+          <polygon points="200,40 292,22 292,166 200,182" fill="#b8ebc8" />
+          <polygon points="105,22 200,40 200,182 105,182" fill="url(#fold)" />
+          <path d="M10 110 Q60 96 105 112 T200 100 T292 92" stroke="#fbd46a" stroke-width="9" fill="none" />
+          <path d="M60 32 Q70 100 52 170" stroke="#fbd46a" stroke-width="7" fill="none" />
+          <path d="M150 30 Q140 110 160 182" stroke="#fbd46a" stroke-width="7" fill="none" />
+          <path d="M240 34 Q250 100 236 178" stroke="#fbd46a" stroke-width="6" fill="none" />
+          <ellipse cx="248" cy="140" rx="22" ry="12" fill="#86d1a0" />
+          <ellipse cx="38" cy="66" rx="16" ry="9" fill="#86d1a0" />
+          <path id="route" d="M34 140 C70 120 90 70 130 80 S190 140 220 110 S260 60 270 56" stroke="#e11d63" stroke-width="3" stroke-dasharray="2 7" stroke-linecap="round" fill="none" />
+          <defs><linearGradient id="fold" x1="0" x2="1"><stop offset="0" stop-color="#000" stop-opacity=".12" /><stop offset=".5" stop-color="#000" stop-opacity="0" /><stop offset="1" stop-color="#000" stop-opacity=".1" /></linearGradient></defs>
+        </svg>
+        <div class="pin" id="pin"><span></span></div>
+      </div>
+      <div class="sheet">
+        <div class="eyebrow">The map of us</div>
+        <h2>Places that hold our memories</h2>
+        <ol class="places-list" id="placesList"></ol>
+      </div>
+    </div>
+  </section>
+
+  <section class="scene s-final" data-key="final" data-title="The wish" data-icon="🎂">
+    <div class="scene-inner">
+      <div class="cake-host" id="finalCake"></div>
+      <div class="eyebrow">One last thing</div>
+      <h2>Happy birthday, <span><span data-to></span>!</span></h2>
+      <p class="hand" style="color:var(--ink)">You deserve every good thing this year brings.<br>With all my love, <span data-from></span> ♥</p>
+      <div class="jump-row" id="jumpRow"></div>
+      <button class="btn ghost" id="againBtn">↻ Open it all again</button>
+    </div>
+  </section>
+
+  <nav class="gnav" aria-label="Surprises">
+    <button class="arrow prev" id="prevBtn" aria-label="Previous surprise">‹</button>
+    <div class="mid"><div class="title" id="navTitle"></div><div class="dots" id="dots"></div></div>
+    <span class="count" id="navCount"></span>
+    <button class="arrow next" id="nextBtn" aria-label="Next surprise">›</button>
+  </nav>
+</div>
+
+<div class="pop" id="pop" hidden>
+  <div class="pop-card">
+    <div class="pop-emoji" id="popEmoji"></div>
+    <div class="eyebrow" id="popEyebrow" style="margin-top:12px"></div>
+    <p class="pop-text" id="popText"></p>
+    <button class="btn" id="popBtn"></button>
+  </div>
+</div>
+
+<script src="shared.js"></script>
+<script src="cake.js"></script>
+<script src="letter.js"></script>
+</body>
+</html>

@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="theme-color" content="#ec4899" />
+<meta name="color-scheme" content="light" />
+<title>Birthday Letter Maker</title>
+<meta name="description" content="Make a birthday surprise they can open on their phone: a cake to blow out, a letter, and little surprises, all in one link." />
+<meta property="og:title" content="Make a birthday surprise they'll never forget 🎂" />
+<meta property="og:description" content="A cake to blow out, a letter to open and little surprises, all in one link. Free, no sign-up." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@800&family=Caveat:wght@700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root { --bg: #fdf1ec; --bg-2: #fbe1e4; --ink: #2b1630; --soft: #6d5566; --pink: #e11d63; --line: #f1cfdc; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; min-height: 100vh; font-family: Inter, system-ui, sans-serif; color: var(--ink);
+    background: radial-gradient(120% 80% at 50% 0%, var(--bg), var(--bg-2)); background-attachment: fixed;
+    display: grid; place-items: center; padding: 32px 16px;
+  }
+  .wrap { width: min(560px, 100%); }
+  header { text-align: center; margin-bottom: 22px; }
+  h1 { font-family: "Playfair Display"; font-size: clamp(30px, 6vw, 44px); margin: 0; }
+  h1 span { color: var(--pink); }
+  header p { font-family: Caveat; font-size: 26px; color: var(--soft); margin: 4px 0 0; }
+  header p.steps { font-family: Inter, system-ui, sans-serif; font-size: 13px; font-weight: 500; margin-top: 10px; }
+  form { background: #fffaf7; border-radius: 22px; padding: 26px; box-shadow: 0 20px 50px -20px rgba(160, 40, 90, .35); display: grid; gap: 16px; }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .row.three { grid-template-columns: 1.4fr 1fr 1fr; }
+  label { display: grid; gap: 6px; font-size: 13px; font-weight: 600; color: var(--soft); }
+  input, select, textarea {
+    font: inherit; font-weight: 400; color: var(--ink); width: 100%;
+    border: 1.5px solid var(--line); border-radius: 12px; padding: 11px 12px; background: #fff; outline: none;
+  }
+  input:focus, select:focus, textarea:focus { border-color: var(--pink); box-shadow: 0 0 0 4px rgba(225, 29, 99, .12); }
+  textarea { min-height: 150px; resize: vertical; font-family: Caveat; font-size: 22px; line-height: 1.3; }
+  .check { display: flex; gap: 10px; align-items: center; font-weight: 500; }
+  .check input { width: 18px; height: 18px; accent-color: var(--pink); }
+  .btns { display: flex; gap: 10px; flex-wrap: wrap; }
+  button, .btn {
+    font: inherit; font-weight: 600; border: 0; border-radius: 999px; padding: 13px 22px; cursor: pointer; text-decoration: none;
+  }
+  .primary { background: var(--pink); color: #fff; box-shadow: 0 12px 24px -12px var(--pink); flex: 1; }
+  .ghost { background: #fde4ee; color: var(--pink); }
+  .result { display: none; gap: 10px; }
+  .result.show { display: grid; }
+  .link { display: flex; gap: 8px; }
+  .link input { font-size: 13px; }
+  small { color: var(--soft); }
+  details { border: 1.5px solid var(--line); border-radius: 14px; padding: 12px 14px; background: #fff; }
+  summary { cursor: pointer; font-weight: 600; font-size: 14px; }
+  summary small { font-weight: 400; }
+  .extras { display: grid; gap: 14px; margin-top: 14px; }
+  textarea.plain { font-family: Inter, system-ui, sans-serif; font-size: 16px; min-height: 96px; line-height: 1.5; }
+  label em { font-style: normal; color: var(--pink); }
+  input, select { font-size: 16px; } /* 16px stops iOS zooming into fields */
+  @media (max-width: 480px) {
+    .row { grid-template-columns: 1fr; }
+    .row.three { grid-template-columns: 1fr 1fr; }
+    .row.three label:first-child { grid-column: 1 / -1; }
+    form { padding: 20px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Make their birthday <span>unforgettable</span></h1>
+    <p>a cake to blow out, a letter to open, and little surprises, all in one link</p>
+    <p class="steps">1. Write it &nbsp;·&nbsp; 2. Get your link &nbsp;·&nbsp; 3. Send it. Free, and no sign-up.</p>
+  </header>
+
+  <form id="form">
+    <div class="row">
+      <label>Who's the birthday star?
+        <input name="to" required maxlength="40" placeholder="Their name or a nickname" />
+      </label>
+      <label>Your name
+        <input name="from" required maxlength="40" placeholder="How they know you" />
+      </label>
+    </div>
+    <div class="row three">
+      <label>Birthday month
+        <select name="month" id="month"></select>
+      </label>
+      <label>Day
+        <input name="day" type="number" min="1" max="31" required value="25" />
+      </label>
+      <label>Turning (optional)
+        <input name="age" type="number" min="1" max="99" placeholder="28" />
+      </label>
+    </div>
+    <label>Your letter <small>(they'll watch it write itself, word by word)</small>
+      <textarea name="message" required maxlength="2000" placeholder="Write something from the heart…"></textarea>
+    </label>
+    <details>
+      <summary>Make the surprises yours <small>(we've filled in ideas. Change them, or empty a box to skip it)</small></summary>
+      <div class="extras">
+        <label>🧸 Reasons you love them, one per line. They win these from the claw machine.
+          <textarea name="reasons" class="plain"></textarea>
+        </label>
+        <label>📖 Your story, one chapter per line as <em>Title | what happened</em>
+          <textarea name="chapters" class="plain"></textarea>
+        </label>
+        <label>⭐ Your wishes for their year ahead, one per line. They float out of a jar.
+          <textarea name="wishes" class="plain"></textarea>
+        </label>
+        <label>📸 Photo booth, up to 4 lines as <em>Caption | photo link (optional)</em>
+          <textarea name="moments" class="plain"></textarea>
+        </label>
+        <label>🗺️ Places that matter to you both, one per line as <em>Place | memory</em>
+          <textarea name="places" class="plain"></textarea>
+        </label>
+      </div>
+    </details>
+    <label class="check"><input type="checkbox" name="lock" checked /> Keep the gift a secret until their birthday</label>
+    <div class="btns">
+      <button class="primary" type="submit">Create my surprise link 💌</button>
+      <button class="ghost" type="button" id="previewBtn">Preview it</button>
+    </div>
+
+    <div class="result" id="result">
+      <div class="link">
+        <input id="linkOut" readonly />
+        <button class="ghost" type="button" id="copyBtn">Copy</button>
+      </div>
+      <small>Your surprise is ready! 🎉 Send this link on WhatsApp, Instagram or text. Everything lives inside the link itself, so only share it with the birthday star.</small>
+    </div>
+  </form>
+</div>
+
+<script src="shared.js"></script>
+<script>
+const form = document.getElementById("form");
+const monthSel = document.getElementById("month");
+MONTHS.forEach((m, i) => monthSel.add(new Option(m, i + 1)));
+monthSel.value = new Date().getMonth() + 1;
+form.message.value = DEFAULT_LETTER.message;
+
+// Prefill the surprise boxes with the examples so people can edit rather than start blank.
+const D = DEFAULT_LETTER;
+form.reasons.value = D.reasons.join("\n");
+form.chapters.value = D.chapters.map((c) => `${c.t} | ${c.x}`).join("\n");
+form.wishes.value = D.wishes.join("\n");
+form.moments.value = D.moments.map((m) => m.c + (m.img ? ` | ${m.img}` : "")).join("\n");
+form.places.value = D.places.map((p) => `${p.n} | ${p.d}`).join("\n");
+
+const lines = (s) => s.split("\n").map((l) => l.trim()).filter(Boolean);
+const pairs = (s) => lines(s).map((l) => l.split("|").map((p) => p.trim()));
+
+function collect() {
+  return {
+    reasons: lines(form.reasons.value),
+    chapters: pairs(form.chapters.value).map(([t, x = ""]) => ({ t, x })),
+    wishes: lines(form.wishes.value),
+    moments: pairs(form.moments.value).slice(0, 4).map(([c, img = ""]) => ({ c, img })),
+    places: pairs(form.places.value).map(([n, d = ""]) => ({ n, d })),
+    to: form.to.value.trim() || DEFAULT_LETTER.to,
+    from: form.from.value.trim() || DEFAULT_LETTER.from,
+    month: Number(form.month.value),
+    day: Math.min(31, Math.max(1, Number(form.day.value) || 1)),
+    age: Number(form.age.value) || "",
+    message: form.message.value.trim(),
+    lock: form.lock.checked,
+  };
+}
+function buildUrl(data, extra = "") {
+  const base = new URL("letter.html", location.href);
+  base.search = extra;
+  base.hash = "d=" + encodeLetter(data);
+  return base.href;
+}
+
+form.addEventListener("submit", (e) => {
+  e.preventDefault();
+  document.getElementById("linkOut").value = buildUrl(collect());
+  document.getElementById("result").classList.add("show");
+});
+document.getElementById("previewBtn").addEventListener("click", () => {
+  window.open(buildUrl(collect(), "?preview"), "_blank");
+});
+document.getElementById("copyBtn").addEventListener("click", async (e) => {
+  const out = document.getElementById("linkOut");
+  try { await navigator.clipboard.writeText(out.value); } catch { out.select(); document.execCommand("copy"); }
+  e.target.textContent = "Copied!";
+  setTimeout(() => (e.target.textContent = "Copy"), 1500);
+});
+</script>
+</body>
+</html>
