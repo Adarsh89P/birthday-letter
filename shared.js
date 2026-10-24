@@ -1,7 +1,7 @@
 // Letter data travels in the URL hash, so no server or database is needed.
 // An empty list (or null) in a letter hides that surprise.
 const DEFAULT_LETTER = {
-  to: "My cute princess",
+  to: "My Princess",
   from: "Adarsh",
   month: 10,
   day: 25,
