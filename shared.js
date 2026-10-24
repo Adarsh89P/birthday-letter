@@ -35,10 +35,10 @@ const DEFAULT_LETTER = {
     "People around you who love you as much as I do. (That's a lot.)",
   ],
   moments: [
-    { c: "Our first picture together", img: "" },
-    { c: "That rainy day we loved", img: "" },
-    { c: "The best dinner ever", img: "" },
-    { c: "You and me, always", img: "" },
+    { c: "On top of the world at Chicham Bridge", img: "photos/1.jpg" },
+    { c: "Sunshine on the Ganga", img: "photos/2.jpg" },
+    { c: "A queen in red", img: "photos/3.jpg" },
+    { c: "Simply, beautifully you", img: "photos/4.jpg" },
   ],
   places: [
     { n: "The café where it all began", d: "Two coffees and three hours that felt like ten minutes." },

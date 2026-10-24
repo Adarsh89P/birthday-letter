@@ -396,10 +396,23 @@ if (has.moments) hooks.moments = (() => {
   const fills = ["linear-gradient(135deg,#fbcfe8,#c4b5fd)", "linear-gradient(135deg,#a7f3d0,#fde68a)", "linear-gradient(135deg,#fecaca,#fbcfe8)", "linear-gradient(135deg,#bfdbfe,#ddd6fe)"];
   const emojis = ["🥰", "☔", "🍝", "💞"];
   $("boothDots").innerHTML = shots.map(() => "<i></i>").join("");
+  const url = (m) => encodeURI(m.img).replace(/'/g, "%27");
   $("strip").innerHTML = shots.map((m, k) => {
-    const bg = m.img ? `background-image:url('${encodeURI(m.img)}')` : `background:${fills[k % 4]}`;
-    return `<figure><div class="frame" style="${bg}">${m.img ? "" : emojis[k % 4]}</div><figcaption>${esc(m.c)}</figcaption></figure>`;
+    const bg = m.img ? `background-image:url('${url(m)}')` : `background:${fills[k % 4]}`;
+    return `<figure><div class="frame${m.img ? " photo" : ""}" data-k="${k}" style="${bg}">${m.img ? "" : emojis[k % 4]}</div><figcaption>${esc(m.c)}</figcaption></figure>`;
   }).join("");
+  shots.forEach((m) => { if (m.img) new Image().src = m.img; }); // preload so the flash shows the photo instantly
+  // tap a photo on the strip to see it big
+  $("strip").addEventListener("click", (e) => {
+    const f = e.target.closest(".frame.photo");
+    if (!f) return;
+    const m = shots[Number(f.dataset.k)];
+    const view = document.createElement("div");
+    view.className = "photo-view";
+    view.innerHTML = `<figure><img src="${url(m)}" alt=""><figcaption>${esc(m.c)}</figcaption></figure>`;
+    view.onclick = () => view.remove();
+    document.body.appendChild(view);
+  });
   let running = false;
   $("snapBtn").onclick = async () => {
     if (running) return;
@@ -412,10 +425,13 @@ if (has.moments) hooks.moments = (() => {
       for (const n of ["3", "2", "1"]) { $("count").textContent = n; await sleep(k ? 260 : 500); }
       $("count").textContent = "";
       $("flash").classList.remove("go"); void $("flash").offsetWidth; $("flash").classList.add("go");
+      if (shots[k].img) { $("shot").style.backgroundImage = `url('${url(shots[k])}')`; $("shot").classList.add("on"); }
       dots[k].classList.add("on");
-      await sleep(350);
+      await sleep(shots[k].img ? 900 : 350);
     }
     booth.classList.remove("open");
+    await sleep(400);
+    $("shot").classList.remove("on");
     await sleep(500);
     strip.parentElement.classList.add("show");
     await sleep(30);

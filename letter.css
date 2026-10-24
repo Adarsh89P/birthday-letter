@@ -415,6 +415,13 @@ h2 { font-family: "Playfair Display", serif; font-weight: 800; font-size: clamp(
 .strip { width: min(170px, 46vw); background: #fff; padding: 10px 10px 4px; border-radius: 4px; box-shadow: 0 16px 30px -14px rgba(0,0,0,.4); display: grid; gap: 8px; transform: translateY(-100%); opacity: 0; transition: transform 1.2s cubic-bezier(.2, .8, .3, 1), opacity .3s; }
 .strip.out { transform: none; opacity: 1; }
 .frame { aspect-ratio: 4 / 3; border-radius: 2px; background-size: cover; background-position: center; display: grid; place-items: center; font-size: 36px; }
+.frame.photo { aspect-ratio: 3 / 4; background-position: center 25%; cursor: zoom-in; }
+.shot { position: absolute; inset: 0; background-size: cover; background-position: center 25%; opacity: 0; transition: opacity .3s; }
+.shot.on { opacity: 1; }
+.photo-view { position: fixed; inset: 0; z-index: 52; display: grid; place-items: center; padding: 24px 16px; background: rgba(43, 22, 48, .8); animation: fade .3s; }
+.photo-view figure { margin: 0; background: #fff; padding: 10px 10px 4px; border-radius: 6px; max-width: min(420px, 100%); animation: pop .4s cubic-bezier(.2, 1.4, .4, 1) both; }
+.photo-view img { display: block; width: 100%; max-height: calc(100dvh - 140px); object-fit: contain; border-radius: 3px; }
+.photo-view figcaption { font-family: Caveat, cursive; font-size: 24px; text-align: center; padding: 6px 0 4px; }
 .strip figcaption { font-family: Caveat, cursive; font-size: 19px; color: var(--ink-soft); margin: -4px 0 2px; }
 .strip figure { margin: 0; }
 
