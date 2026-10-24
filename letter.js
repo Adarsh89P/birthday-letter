@@ -139,6 +139,7 @@ function go(i, force) {
   i = Math.max(0, Math.min(scenes.length - 1, i));
   if (i === cur && !force) return;
   if (cur >= 0 && cur !== i) hooks[scenes[cur].dataset.key]?.leave?.();
+  if (!force) $("gallery").classList.add("swiped"); // they've found how to move, so hide the hint
   cur = i;
   seen.add(i);
   scenes.forEach((s, k) => {
@@ -157,19 +158,41 @@ $("prevBtn").onclick = () => go(cur - 1);
 $("nextBtn").onclick = () => go(cur + 1);
 $("againBtn").onclick = () => { hooks.letter.reset(); hooks.candles.reset(); go(0); };
 
-// swipe left/right between surprises
+// swipe left/right between surprises: the page follows the finger, then snaps
 (() => {
-  let sx = 0, sy = 0, st = 0, tracking = false;
+  let sx = 0, sy = 0, st = 0, tracking = false, dragging = false, dx = 0;
+  const scene = () => scenes[cur];
   $("gallery").addEventListener("pointerdown", (e) => {
     tracking = !e.target.closest(".no-swipe, button, a, input, .pocket, .lc-body, .cake-host");
+    dragging = false; dx = 0;
     sx = e.clientX; sy = e.clientY; st = Date.now();
   });
-  $("gallery").addEventListener("pointerup", (e) => {
+  $("gallery").addEventListener("pointermove", (e) => {
+    if (!tracking) return;
+    const mx = e.clientX - sx, my = e.clientY - sy;
+    if (!dragging) {
+      if (Math.abs(my) > 12 && Math.abs(my) > Math.abs(mx)) { tracking = false; return; } // scrolling instead
+      if (Math.abs(mx) < 10) return;
+      dragging = true;
+      scene().style.transition = "none";
+    }
+    const atEdge = (mx > 0 && cur === 0) || (mx < 0 && cur === scenes.length - 1);
+    dx = atEdge ? mx * 0.25 : mx;
+    scene().style.transform = `translateX(${dx}px) rotate(${dx / 60}deg)`;
+    scene().style.opacity = 1 - Math.min(Math.abs(dx) / innerWidth, 0.5);
+  });
+  const end = () => {
     if (!tracking) return;
     tracking = false;
-    const dx = e.clientX - sx, dy = e.clientY - sy;
-    if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5 && Date.now() - st < 800) go(cur + (dx < 0 ? 1 : -1));
-  });
+    if (!dragging) return;
+    dragging = false;
+    const s = scene();
+    s.style.transition = s.style.transform = s.style.opacity = "";
+    const fast = Date.now() - st < 300 && Math.abs(dx) > 30;
+    if (Math.abs(dx) > innerWidth * 0.22 || fast) go(cur + (dx < 0 ? 1 : -1));
+  };
+  $("gallery").addEventListener("pointerup", end);
+  $("gallery").addEventListener("pointercancel", end);
 })();
 
 addEventListener("keydown", (e) => {

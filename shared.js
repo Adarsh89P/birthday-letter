@@ -41,10 +41,12 @@ const DEFAULT_LETTER = {
     { c: "Simply, beautifully you", img: "photos/4.jpg" },
   ],
   places: [
-    { n: "The café where it all began", d: "Two coffees and three hours that felt like ten minutes." },
-    { n: "The beach at sunset", d: "Sand everywhere, cold feet and zero regrets." },
-    { n: "Our little bookshop", d: "You found the perfect book. I found you smiling at it." },
-    { n: "Wherever we go next", d: "You choose the place. I'm already packing." },
+    { n: "The metro rides where it all began", d: "Crowded coaches and stolen glances. Somewhere between two stations, I started falling for you, and I never stopped." },
+    { n: "Our Banaras trip", d: "The ghats glowing at sunset, our boat on the Ganga, and you in red, more beautiful than the whole city." },
+    { n: "Our first kiss", d: "The world went quiet for a moment. My heart still skips a beat every time I think about it." },
+    { n: "Shopping days and bike rides", d: "Your arms around me on the bike, the city rushing past, and you laughing at everything. My favourite kind of freedom." },
+    { n: "Cafés and our food dates", d: "Every café becomes our café when I'm sitting across from you, stealing bites from your plate." },
+    { n: "Wherever we go next", d: "I don't care where the road takes us, as long as my hand is in yours." },
   ],
 };
 
